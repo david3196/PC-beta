@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import (QMainWindow, QCheckBox, QToolBar, QAction, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QComboBox,
-                            QScrollArea, QFrame, QSizePolicy, QLabel, QListWidget, QStackedLayout, QListWidgetItem, QToolButton)
+                            QScrollArea, QFrame, QSizePolicy, QLabel, QListWidget, QStackedLayout, QListWidgetItem, QToolButton, QTextEdit)
 from PyQt5.QtGui import QIcon, QFont, QPixmap
 from PyQt5.QtCore import Qt, QSize
 
@@ -11,13 +11,7 @@ def GetUserType():
 def GetUserBalance():
     return 36.99
 
-def UpdateUserBalance(nr):
-    pass
-
-def GetReviewsAvg():
-    return 6.7
-
-class ProductPage(QMainWindow):
+class JobPage(QMainWindow):
     def __init__(self, product_data):
         super().__init__()
 
@@ -104,28 +98,12 @@ class ProductPage(QMainWindow):
         self.setStyleSheet("QWidget { background: %s }" % background)
         main_widget.setStyleSheet(background)
 
-        review_and_title_layout = QHBoxLayout()
-
-        avg = GetReviewsAvg()
-
-        review_button = QToolButton()
-        review_icon = QIcon("./review.png")
-        review_button.setIcon(review_icon)
-        review_button.setText(f'{avg}/10')
-        review_button.setStyleSheet("font-size:15px; color: grey; border: 0px;")
-        review_button.setIconSize(QSize(50, 50))
-        review_button.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-        review_and_title_layout.addWidget(review_button)
-        review_button.setCursor(Qt.PointingHandCursor)
-        review_button.clicked.connect(lambda: self.open_review_page())
-        
         title_label = QLabel(self.product_data["title"])
-        title_label.setFont(QFont("Arial", 24))
+        title_label.setFont(QFont("Arial", 20))
         title_label.setStyleSheet("color: white; font-weight: bold;")
         title_label.setAlignment(Qt.AlignCenter)
-        review_and_title_layout.addWidget(title_label)
 
-        main_layout.addLayout(review_and_title_layout)
+        main_layout.addWidget(title_label)
 
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
@@ -145,43 +123,70 @@ class ProductPage(QMainWindow):
         scroll_area.setWidget(scroll_widget)
         main_layout.addWidget(scroll_area)
 
-        price_and_buy_layout = QHBoxLayout()
+        price_layout = QHBoxLayout()
         
-        price_label = QLabel(self.product_data["price"])
+        price_label = QLabel("Price: "+ str(self.product_data["price"]))
         price_label.setFont(QFont("Arial", 18))
         price_label.setStyleSheet("color: white;")
         price_label.setAlignment(Qt.AlignCenter)
 
-        price_and_buy_layout.addWidget(price_label)
-
-        add_to_cart_button = QPushButton("ADD TO CART")
-        add_to_cart_button.setCursor(Qt.PointingHandCursor)
-        add_to_cart_button.setStyleSheet("background: #3e613e; color: white; font-size: 20px; font-weight:bold;")
-        add_to_cart_button.setFixedSize(170, 60)
-        add_to_cart_button.clicked.connect(self.add_to_cart)
-
-        buy_button = QPushButton("BUY")
-        buy_button.setCursor(Qt.PointingHandCursor)
-        buy_button.setStyleSheet("background: #0e5b0e; color: white; font-size: 25px; font-weight:bold;")
-        buy_button.setFixedSize(150, 60)
-        buy_button.clicked.connect(self.buy)
-
-        price_and_buy_layout.addWidget(buy_button)
-        price_and_buy_layout.addWidget(add_to_cart_button)
-
-        main_layout.addLayout(price_and_buy_layout)
+        price_layout.addWidget(price_label)
+        main_layout.addLayout(price_layout)
 
         description_label = QLabel(self.product_data["description"])
         description_label.setWordWrap(True)
         description_label.setAlignment(Qt.AlignJustify)
+        
         description_label.setStyleSheet("font-size: 16px; color: white; padding: 20px;")
 
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
         scroll_area.setWidget(description_label)
+        scroll_area.setMinimumHeight(250)
         main_layout.addWidget(scroll_area)
 
-        self.setCentralWidget(main_widget)
+        test_layout = QHBoxLayout()
+        test_button = QPushButton("DOWNLOAD")
+        test_button.setCursor(Qt.PointingHandCursor)
+        test_button.setStyleSheet("background: #3e613e; color: white; font-size: 20px; font-weight:bold;")
+        test_button.setFixedSize(170, 60)
+        test_button.clicked.connect(self.download)
+        test_layout.addWidget(test_button)
+
+        main_layout.addLayout(test_layout)
+
+        self.raport_input = QTextEdit()
+        self.raport_input.setAcceptDrops(False)
+        self.raport_input.setPlaceholderText("Raport...")
+        self.raport_input.setStyleSheet("color: white;")
+        self.raport_input.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.raport_input.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.raport_input.setFixedHeight(300)
+        main_layout.addWidget(self.raport_input)
+
+        accept_and_reject_layout = QHBoxLayout()
+
+        reject_button = QPushButton("REJECT")
+        reject_button.setCursor(Qt.PointingHandCursor)
+        reject_button.setStyleSheet("background: red; color: white; font-size: 25px; font-weight:bold;")
+        reject_button.setFixedSize(150, 60)
+        reject_button.clicked.connect(self.reject)
+
+        accept_button = QPushButton("ACCEPT")
+        accept_button.setCursor(Qt.PointingHandCursor)
+        accept_button.setStyleSheet("background: #0e5b0e; color: white; font-size: 25px; font-weight:bold;")
+        accept_button.setFixedSize(150, 60)
+        accept_button.clicked.connect(self.accept)
+
+        accept_and_reject_layout.addWidget(accept_button)
+        accept_and_reject_layout.addWidget(reject_button)
+        main_layout.addLayout(accept_and_reject_layout)
+
+        scroll_area = QScrollArea()
+        scroll_area.setStyleSheet("background: #1e1e1e;")
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setWidget(main_widget)
+        self.setCentralWidget(scroll_area)
 
 
     def switch_to_store(self):
@@ -219,30 +224,25 @@ class ProductPage(QMainWindow):
         self.cart_page.show()
         self.hide()
 
+    def reject(self):
+        pass
+
+    def download(self):
+        pass
+
+    def accept(self):
+        raport_content = self.raport_input.toPlainText()
+        print(raport_content)
+        
+        from ManagementPage import ManagementPage
+
+        self.management_page = ManagementPage()
+        self.management_page.show()
+        self.hide()
+    
     def switch_to_wallet(self):
         from WalletPage import WalletPage
 
         self.wallet_page = WalletPage()
         self.wallet_page.show()
         self.hide()
-        
-    def open_review_page(self):
-        from ReviewPage import ReviewPage
-        
-        self.review_page = ReviewPage(self.product_data)
-        self.review_page.show()
-
-
-    def add_to_cart(self):
-        from CartPage import cart
-        cart[self.product_data["title"]] = self.product_data["price"]
-
-    def buy(self):
-        price = self.product_data["price"]
-        balance = GetUserBalance()
-        if float(balance) >= float(price):
-            UpdateUserBalance(float(balance) - float(price)) 
-        else:
-            QMessageBox.warning(self, "Not enough balance", "You do not have enough balance to purchase this item.")
-
-    

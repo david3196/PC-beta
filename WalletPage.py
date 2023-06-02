@@ -1,39 +1,68 @@
 import sys
 from PyQt5.QtWidgets import (QMainWindow, QCheckBox, QToolBar, QAction, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QComboBox,
-                            QScrollArea, QFrame, QSizePolicy, QLabel, QListWidget, QStackedLayout, QListWidgetItem, QToolButton)
+                            QScrollArea, QFrame, QSizePolicy, QLabel, QToolButton)
 from PyQt5.QtGui import QIcon, QFont, QPixmap
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt, QSize, pyqtSignal
+from ProductPage import ProductPage
 
 #todo
 def GetUserType():
-    return 1
+    return 0
 
 def GetUserBalance():
     return 36.99
 
-def UpdateUserBalance(nr):
-    pass
+def getUserLibList():
+    list = [
+        {"date": "10.12.2022",
+        "title": "App1",
+        "price": "12"},
+        {"date": "5.05.2023",
+        "title": "Game1",
+        "price": "14"},
+        {"date": "16.06.2022",
+        "title": "App2",
+        "price": "18"},
+        {"date": "10.02.2023",
+        "title": "Tool2",
+        "price": "19"},
+        {"date": "10.12.2022",
+        "title": "App1",
+        "price": "12"},
+        {"date": "5.05.2023",
+        "title": "Game1",
+        "price": "14"},
+        {"date": "16.06.2022",
+        "title": "App2",
+        "price": "18"},
+        {"date": "10.02.2023",
+        "title": "Tool2",
+        "price": "19"},
+    ]
+    return list
 
-def GetReviewsAvg():
-    return 6.7
+class ClickableQFrame(QFrame):
+    clicked = pyqtSignal()
 
-class ProductPage(QMainWindow):
-    def __init__(self, product_data):
+    def mousePressEvent(self, event):
+        self.clicked.emit()
+
+
+class WalletPage(QMainWindow):
+    def __init__(self):
         super().__init__()
 
         self.setWindowTitle("Magazin de produse digitale")
         self.setGeometry(100, 100, 1200, 800)
-
-        self.product_data = product_data
-
+        self.app_data = getUserLibList()
         self.init_tool_bar()
         self.init_main_layout()
-    
+
     def init_tool_bar(self):
         tool_bar = QToolBar()
 
         user_type = GetUserType()
-
+        
         store_action = QAction("Store", self)
         store_action.triggered.connect(self.switch_to_store)
 
@@ -84,7 +113,6 @@ class ProductPage(QMainWindow):
         balance_button.setCursor(Qt.PointingHandCursor)
         tool_bar.addWidget(balance_button)
         balance_button.clicked.connect(self.switch_to_wallet)
-
         
         tool_bar.setStyleSheet("""
         QToolButton { margin-right: 50px; color: white; font-size: 18px;  }
@@ -97,93 +125,107 @@ class ProductPage(QMainWindow):
     def init_main_layout(self):
         main_widget = QWidget()
         main_layout = QVBoxLayout(main_widget)
-
         background = """
         background: #1e1e1e
         """
         self.setStyleSheet("QWidget { background: %s }" % background)
         main_widget.setStyleSheet(background)
-
-        review_and_title_layout = QHBoxLayout()
-
-        avg = GetReviewsAvg()
-
-        review_button = QToolButton()
-        review_icon = QIcon("./review.png")
-        review_button.setIcon(review_icon)
-        review_button.setText(f'{avg}/10')
-        review_button.setStyleSheet("font-size:15px; color: grey; border: 0px;")
-        review_button.setIconSize(QSize(50, 50))
-        review_button.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-        review_and_title_layout.addWidget(review_button)
-        review_button.setCursor(Qt.PointingHandCursor)
-        review_button.clicked.connect(lambda: self.open_review_page())
         
-        title_label = QLabel(self.product_data["title"])
-        title_label.setFont(QFont("Arial", 24))
-        title_label.setStyleSheet("color: white; font-weight: bold;")
+        
+        title_label = QLabel("Current balance: $" + str(GetUserBalance()))
+        title_label.setFont(QFont("Arial", 15))
+        title_label.setStyleSheet("color: white;")
         title_label.setAlignment(Qt.AlignCenter)
-        review_and_title_layout.addWidget(title_label)
+        main_layout.addWidget(title_label)
 
-        main_layout.addLayout(review_and_title_layout)
+        main_layout.addStretch(1)
 
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setFixedHeight(300)
-        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        
-        scroll_widget = QWidget()
-        scroll_layout = QHBoxLayout(scroll_widget)
-
-        for img_path in self.product_data["images"]:
-            img_label = QLabel()
-            pixmap = QPixmap(img_path)
-            pixmap = pixmap.scaledToHeight(250)
-            img_label.setPixmap(pixmap)
-            scroll_layout.addWidget(img_label)
-
-        scroll_area.setWidget(scroll_widget)
-        main_layout.addWidget(scroll_area)
-
-        price_and_buy_layout = QHBoxLayout()
-        
-        price_label = QLabel(self.product_data["price"])
-        price_label.setFont(QFont("Arial", 18))
-        price_label.setStyleSheet("color: white;")
-        price_label.setAlignment(Qt.AlignCenter)
-
-        price_and_buy_layout.addWidget(price_label)
-
-        add_to_cart_button = QPushButton("ADD TO CART")
-        add_to_cart_button.setCursor(Qt.PointingHandCursor)
-        add_to_cart_button.setStyleSheet("background: #3e613e; color: white; font-size: 20px; font-weight:bold;")
-        add_to_cart_button.setFixedSize(170, 60)
-        add_to_cart_button.clicked.connect(self.add_to_cart)
-
-        buy_button = QPushButton("BUY")
-        buy_button.setCursor(Qt.PointingHandCursor)
-        buy_button.setStyleSheet("background: #0e5b0e; color: white; font-size: 25px; font-weight:bold;")
-        buy_button.setFixedSize(150, 60)
-        buy_button.clicked.connect(self.buy)
-
-        price_and_buy_layout.addWidget(buy_button)
-        price_and_buy_layout.addWidget(add_to_cart_button)
-
-        main_layout.addLayout(price_and_buy_layout)
-
-        description_label = QLabel(self.product_data["description"])
-        description_label.setWordWrap(True)
-        description_label.setAlignment(Qt.AlignJustify)
-        description_label.setStyleSheet("font-size: 16px; color: white; padding: 20px;")
+        history_label = QLabel("Purchase history")
+        history_label.setFont(QFont("Arial", 20))
+        history_label.setStyleSheet("color: white; font-weight: bold;")
+        history_label.setAlignment(Qt.AlignCenter)
+        main_layout.addWidget(history_label)
 
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(description_label)
+
+        apps_widget = QWidget()
+        apps_layout = QVBoxLayout(apps_widget)
+        
+        for app in self.app_data:
+            app_widget = self.create_app_widget(app)
+            apps_layout.addWidget(app_widget)
+
+        scroll_area.setWidget(apps_widget)
         main_layout.addWidget(scroll_area)
 
-        self.setCentralWidget(main_widget)
+        main_layout.addStretch(3)
+        if len(getUserLibList()) > 0:
+            self.setCentralWidget(main_widget)
+        else:
+            main_widget = QWidget()
+            main_layout = QVBoxLayout(main_widget)
 
+            background = """
+            background: #1e1e1e
+            """
+            self.setStyleSheet("QWidget { background: %s }" % background)
+            main_widget.setStyleSheet(background)
+            main_layout.addStretch(3)
+            title_label = QLabel("Current balance: $" + str(GetUserBalance()))
+            title_label.setFont(QFont("Arial", 15))
+            title_label.setStyleSheet("color: white;")
+            title_label.setAlignment(Qt.AlignCenter)
+            main_layout.addWidget(title_label)
+            
+            main_layout.addStretch(1)
 
+            no_label = QLabel("You have no purchases yet!")
+            no_label.setFont(QFont("Arial", 17))
+            no_label.setStyleSheet("color: white; font-weight: bold;")
+            no_label.setAlignment(Qt.AlignCenter)
+            main_layout.addWidget(no_label)
+            main_layout.addStretch(3)
+
+            self.setCentralWidget(main_widget)
+
+    def create_app_widget(self, app):
+        app_widget = ClickableQFrame()
+        app_widget.setFrameShape(QFrame.StyledPanel)
+        app_widget.setFrameShadow(QFrame.Raised)
+        app_widget.setLineWidth(1)
+        app_widget.setStyleSheet("border: 1px solid #CCCCCC;")
+
+        size_policy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        app_widget.setSizePolicy(size_policy)
+        app_widget.setFixedHeight(50)
+
+        app_layout = QHBoxLayout()
+
+        date_label = QLabel(app["date"])
+        date_label.setStyleSheet("font-size: 18px; border: 0px; color: white;")
+        
+        title_label = QLabel(app["title"])
+        title_label.setStyleSheet("font-size: 18px; border: 0px; color: white;")
+
+        price_label = QLabel("$"+app["price"])
+        price_label.setStyleSheet("font-size: 18px; border: 0px; color: white;")
+
+        
+        app_layout.addStretch(1)
+        app_layout.addWidget(date_label)
+        app_layout.addStretch(1)
+        app_layout.addWidget(title_label)
+        app_layout.addStretch(1)
+        app_layout.addWidget(price_label)
+        app_layout.addStretch(1)
+
+        app_widget.setLayout(app_layout)
+
+        return app_widget
+    
     def switch_to_store(self):
         from StorePage import StorePage
 
@@ -215,7 +257,7 @@ class ProductPage(QMainWindow):
     def switch_to_cart(self):
         from CartPage import CartPage
 
-        self.cart_page = CartPage(self.product_data)
+        self.cart_page = CartPage(self.app_data)
         self.cart_page.show()
         self.hide()
 
@@ -226,23 +268,3 @@ class ProductPage(QMainWindow):
         self.wallet_page.show()
         self.hide()
         
-    def open_review_page(self):
-        from ReviewPage import ReviewPage
-        
-        self.review_page = ReviewPage(self.product_data)
-        self.review_page.show()
-
-
-    def add_to_cart(self):
-        from CartPage import cart
-        cart[self.product_data["title"]] = self.product_data["price"]
-
-    def buy(self):
-        price = self.product_data["price"]
-        balance = GetUserBalance()
-        if float(balance) >= float(price):
-            UpdateUserBalance(float(balance) - float(price)) 
-        else:
-            QMessageBox.warning(self, "Not enough balance", "You do not have enough balance to purchase this item.")
-
-    

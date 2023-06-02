@@ -1,14 +1,16 @@
 import sys
 from PyQt5.QtWidgets import (QMainWindow, QCheckBox, QToolBar, QAction, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QComboBox,
-                            QScrollArea, QFrame, QSizePolicy, QLabel)
+                            QScrollArea, QFrame, QSizePolicy, QLabel, QToolButton)
 from PyQt5.QtGui import QIcon, QFont, QPixmap
 from PyQt5.QtCore import Qt, QSize, pyqtSignal
 from ProductPage import ProductPage
 
 #todo
 def GetUserType():
-    return 0
+    return 1
 
+def GetUserBalance():
+    return 36.99
 
 class ClickableQFrame(QFrame):
     clicked = pyqtSignal()
@@ -28,8 +30,11 @@ class StorePage(QMainWindow):
             "title": "App1",
             "image": "path/to/app1_image.png",
             "images": ["./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png"],
-            "description": "This is a sample application.This is a sample application.",
-            "price": "$9.99",
+            "description": """
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mollis massa in rhoncus congue. Vestibulum eleifend neque et nulla convallis lacinia. Vivamus iaculis dui id lectus sollicitudin, a dignissim nunc venenatis. Nunc in malesuada nisi. Nam nec est at massa consectetur pharetra. Sed iaculis venenatis eros eget fringilla. Sed euismod risus at urna viverra gravida. Cras mi nisl, semper vitae enim id, pharetra sodales risus. Maecenas pulvinar nisi neque, eget aliquet est rhoncus eget. Nullam convallis metus ac nulla consequat, quis commodo purus consequat. Mauris feugiat nunc eget urna auctor, vel gravida nisi egestas. Pellentesque a metus commodo, elementum augue ut, laoreet diam. Cras scelerisque mollis porta. Aenean sagittis ligula ut urna hendrerit, nec finibus nunc auctor. Aliquam fringilla porta elit, pretium volutpat erat vehicula at. Suspendisse non varius velit.
+
+                Phasellus eleifend nunc eget scelerisque condimentum. Vestibulum ultrices semper enim, ac sodales nulla mollis vitae. Mauris vel aliquet ante. Sed at ultricies leo. Phasellus quis sapien lorem. Morbi consequat euismod nisl, ut fringilla mi blandit vehicula. Curabitur arcu dui, dignissim at pharetra a, tempus sodales arcu. Nunc vehicula lacus sed est finibus, nec varius ante imperdiet. Aliquam semper libero ante, nec ultrices augue consectetur eu. Sed lacus dolor, pellentesque et commodo sed, tempor eget ipsum. Nulla id bibendum felis, a hendrerit ipsum. Vestibulum porttitor a enim in vestibulum. Aliquam erat volutpat. Nunc mi massa, volutpat eget quam a, auctor lobortis ante. Etiam dictum suscipit ornare. In orci lorem, aliquam at maximus ut, elementum at nisi.""",
+            "price": "9.99",
             "category": "Apps"
         },
         {
@@ -37,7 +42,7 @@ class StorePage(QMainWindow):
             "image": "path/to/game1_image.png",
             "images": ["./login-img.png", "./login-img.png"],
             "description": "This is a sample game.",
-            "price": "$19.99",
+            "price": "19.99",
             "category": "Games"
         },
         {
@@ -45,60 +50,54 @@ class StorePage(QMainWindow):
             "image": "path/to/app1_image.png",
             "images": ["./login-img.png"],
             "description": "This is a sample application.",
-            "price": "$9.99",
+            "price": "9.99",
             "category": "Apps"
         },
         {
             "title": "Game1",
             "image": "path/to/game1_image.png",
+            "images": ["./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png"],
             "description": "This is a sample game.",
-            "price": "$19.99",
+            "price": "19.99",
             "category": "Games"
         },
         {
             "title": "App1",
             "image": "path/to/app1_image.png",
+            "images": ["./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png"],
             "description": "This is a sample application.",
-            "price": "$9.99",
+            "price": "9.99",
             "category": "Apps"
         },
         {
             "title": "Game2",
             "image": "path/to/game1_image.png",
+            "images": ["./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png"],
             "description": "This is a sample game.",
-            "price": "$19.99",
+            "price": "19.99",
             "category": "Games"
         },
         {
             "title": "App1",
             "image": "login-img.png",
+            "images": ["./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png"],
             "description": "This is a sample application.",
-            "price": "$9.99",
+            "price": "9.99",
             "category": "Apps"
         },
         {
             "title": "Game3",
             "image": "path/to/game1_image.png",
+            "images": ["./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png", "./login-img.png"],
             "description": "This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample gameThis is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample gameThis is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game.This is a sample game",
-            "price": "$19.99",
+            "price": "19.99",
             "category": "Games"
         },
         ]
-        #self.init_menu_bar()
+
         self.init_tool_bar()
         self.init_main_layout()
-        
-
-    def init_menu_bar(self):
-        menu_bar = self.menuBar()
-
-        steam_menu = menu_bar.addMenu("Steam")
-        view_menu = menu_bar.addMenu("View")
-        friends_menu = menu_bar.addMenu("Friends")
-        games_menu = menu_bar.addMenu("Games")
-        help_menu = menu_bar.addMenu("Help")
-
-
+    
     def init_tool_bar(self):
         tool_bar = QToolBar()
 
@@ -117,15 +116,43 @@ class StorePage(QMainWindow):
         products_action.triggered.connect(self.switch_to_products)
 
         tool_bar.addAction(store_action)
+        store_action_widget = tool_bar.widgetForAction(store_action)
+        store_action_widget.setCursor(Qt.PointingHandCursor)
         tool_bar.addAction(library_action)
+        library_action_widget = tool_bar.widgetForAction(library_action)
+        library_action_widget.setCursor(Qt.PointingHandCursor)
+        
         if user_type == 0:
             tool_bar.addAction(management_action)
+            management_action_widget = tool_bar.widgetForAction(management_action)
+            management_action_widget.setCursor(Qt.PointingHandCursor)
         else:
             tool_bar.addAction(products_action)
+            products_action_widget = tool_bar.widgetForAction(products_action)
+            products_action_widget.setCursor(Qt.PointingHandCursor)
 
-        for action in tool_bar.actions():
-            widget = tool_bar.widgetForAction(action)
-            widget.setCursor(Qt.PointingHandCursor)
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        tool_bar.addWidget(spacer)
+
+        cart_button = QToolButton()
+        cart_icon = QIcon("./cart.png")
+        cart_button.setIcon(cart_icon)
+        cart_button.setCursor(Qt.PointingHandCursor)
+        tool_bar.addWidget(cart_button)
+        cart_button.clicked.connect(self.switch_to_cart)
+
+        balance = GetUserBalance()
+
+        balance_button = QToolButton()
+        wallet_icon = QIcon("./wallet.png")
+        balance_button.setIcon(wallet_icon)
+        balance_button.setText(f'${balance}')
+        balance_button.setStyleSheet("font-size: 14px")
+        balance_button.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        balance_button.setCursor(Qt.PointingHandCursor)
+        tool_bar.addWidget(balance_button)
+        balance_button.clicked.connect(self.switch_to_wallet)
         
         tool_bar.setStyleSheet("""
         QToolButton { margin-right: 50px; color: white; font-size: 18px;  }
@@ -135,26 +162,6 @@ class StorePage(QMainWindow):
 
         self.addToolBar(tool_bar)
 
-    def switch_to_library(self):
-        from LibraryPage import LibraryPage
-
-        self.library_page = LibraryPage()
-        self.library_page.show()
-        self.hide()
-    
-    def switch_to_management(self):
-        from ManagementPage import ManagementPage
-
-        self.management_page = ManagementPage()
-        self.management_page.show()
-        self.hide()
-
-    def switch_to_products(self):
-        from ProductsPage import ProductsPage
-
-        self.products_page = ProductsPage()
-        self.products_page.show()
-        self.hide()
 
     def on_search_button_clicked(self):
         search_text = self.search_edit.text().lower()
@@ -278,4 +285,52 @@ class StorePage(QMainWindow):
         self.product_page = ProductPage(app)
         self.product_page.show()
         self.hide()
+
+    def switch_to_store(self):
+        from StorePage import StorePage
+
+        self.store_page = StorePage()
+        self.store_page.show()
+        self.hide()
+
+    def switch_to_management(self):
+        from ManagementPage import ManagementPage
+
+        self.management_page = ManagementPage()
+        self.management_page.show()
+        self.hide()
+
+    def switch_to_products(self):
+        from ProductsPage import ProductsPage
+
+        self.products_page = ProductsPage()
+        self.products_page.show()
+        self.hide()
+
+    def switch_to_library(self):
+        from LibraryPage import LibraryPage
+
+        self.library_page = LibraryPage()
+        self.library_page.show()
+        self.hide()
+
+    def switch_to_cart(self):
+        from CartPage import CartPage
+
+        self.cart_page = CartPage(self.app_data)
+        self.cart_page.show()
+        self.hide()
+
+    def switch_to_wallet(self):
+        from WalletPage import WalletPage
+
+        self.wallet_page = WalletPage()
+        self.wallet_page.show()
+        self.hide()
+        
+    def open_review_page(self):
+        from ReviewPage import ReviewPage
+        
+        self.review_page = ReviewPage(self.product_data)
+        self.review_page.show()
 
